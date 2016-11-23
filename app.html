@@ -1,0 +1,25 @@
+<html>
+  <body>
+    <div id="app">not rendered</div>
+
+    <script>
+      function renderMyApp() {
+        var el = document.getElementById('app');
+        el.innerHTML = 'rendered';
+      }
+      function endTrace() {
+        // just before paint
+        requestAnimationFrame(function () {
+          // after paint
+          requestAnimationFrame(function () {
+            document.location.href = "about:blank";
+          });
+        });
+      }
+
+      renderMyApp();
+      performance.mark("renderEnd");
+      endTrace();
+    </script>
+  </body>
+</html>
