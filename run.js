@@ -1,6 +1,8 @@
-var InitialRenderBenchmark = require("chrome-tracing").InitialRenderBenchmark;
+var ct = require("chrome-tracing");
+var InitialRenderBenchmark = ct.InitialRenderBenchmark;
+var Runner = ct.Runner;
 
-let benchmark = new InitialRenderBenchmark({
+var benchmark = new InitialRenderBenchmark({
   name: "app initial render",
   url: "http://localhost:3000/",
   endMarker: "renderEnd",
@@ -9,9 +11,19 @@ let benchmark = new InitialRenderBenchmark({
   }
 });
 
-benchmark.run().then((result) => {
-  console.log(result);
-}).catch((err) => {
+var runner = new Runner([benchmark]);
+runner.run(1).then(result => {
+  var first = result[0];
+  console.log(first.meta.cpus);
+  console.log(first.samples);
+}).catch(err => {
+  console.log('ERROR');
   console.error(err);
   process.exit(1);
 });
+
+/*
+meta: { browserVersion: 'Chrome/57.0.2935.0', cpus: [Object] },
+    set: 'app initial render',
+    samples: [ [Object] ]
+*/
